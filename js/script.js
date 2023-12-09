@@ -72,7 +72,7 @@ generateBtn.addEventListener("click", async () => {
         const qrCodeItem = document.createElement("div");
         qrCodeItem.classList.add("qr-code-item");
         qrCodeItem.id = `qr-code-${initialNumber + i}`;
-        const qrCodeText = document.createElement("h3");
+        const qrCodeText = document.createElement("h2");
         qrCodeText.classList.add("qr-code-text");
         qrCodeText.textContent = (initialNumber + i).toString();
         const qrCodeWrapper = document.createElement("div");

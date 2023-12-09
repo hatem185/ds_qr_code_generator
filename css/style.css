@@ -5,6 +5,7 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0px;
   padding: 0px;
+  box-sizing: border-box;
 }
 body {
   background-color: #eee;
@@ -87,7 +88,6 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transform: rotate(-90deg);
 }
 
 #page-switcher {
@@ -153,6 +153,9 @@ main {
   }
 }
 @media print {
+  main {
+    width: auto !important;
+  }
   body {
     background-color: white !important;
   }
@@ -160,8 +163,9 @@ main {
     display: none !important;
   }
   #qr-code-container {
+    overflow: visible !important;
     margin: 0px !important;
-    width: auto !important;
+    width: 100% !important;
     display: flex !important;
     flex-wrap: wrap;
     gap: 0px !important;
@@ -171,9 +175,14 @@ main {
     height: calc(100vh / 3) !important;
     background-color: white !important;
     justify-content: flex-start !important;
+    margin: 0px !important;
+  }
+  .qr-code-item:nth-child(even) {
+    background-color: red !important;
+    padding-left: 25px;
   }
   .qr-code-wrapper img {
-    width: 100px !important;
-    height: 100px !important;
+    width: 150px !important;
+    height: 150px !important;
   }
 }
