@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <script type="text/javascript" src="js/qrcode.min.js"></script>
+    <title>QR Generator</title>
+  </head>
+  <body>
+    <header class="dont-print">
+      <h1 class="page-title">QR Code Generator</h1>
+    </header>
+    <main>
+      <img
+        src="./imgs/ds-logo.png"
+        id="ds-logo"
+        alt="ds-logo"
+        class="dont-print"
+      />
+      <form action="" id="qr-form-generator" class="dont-print">
+        <div class="input-wrapper">
+          <label for="client-qr-code">
+            <h5 class="label-text">Client QR code</h5>
+          </label>
+          <input type="text" id="client-qr-code" />
+        </div>
+        <div class="input-wrapper">
+          <label for="type-qr-code">
+            <h5 class="label-text">Type QR code</h5>
+          </label>
+          <input type="text" id="type-qr-code" />
+        </div>
+        <div class="input-wrapper">
+          <label for="initial-serial-number">
+            <h5 class="label-text">Initial serial number</h5>
+          </label>
+          <input type="text" id="initial-serial-number" required />
+        </div>
+        <div class="input-wrapper">
+          <label for="qty-code">
+            <h5 class="label-text">Quantity</h5>
+          </label>
+          <input type="number" id="qty-code" required />
+        </div>
+        <button type="button" id="generate-button">Generate</button>
+      </form>
+      <div id="qr-code-container"></div>
+      <div id="page-switcher" class="hidden dont-print">
+        <a href="#" id="prev-page">Previous</a>
+        <a href="#" id="next-page">Next</a>
+      </div>
+      <br />
+    </main>
+    <script type="text/javascript" src="js/script.js"></script>
+  </body>
+</html>

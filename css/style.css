@@ -1,0 +1,140 @@
+:root {
+  --image-dim: 100px;
+}
+* {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+body {
+  background-color: #eee;
+}
+header {
+  padding: 16px;
+  background-color: rgb(210, 68, 68);
+}
+
+.page-title {
+  color: white;
+}
+
+main {
+  margin: auto;
+  width: 85%;
+}
+#ds-logo {
+  display: block;
+  margin: 50px auto;
+  width: var(--image-dim);
+  height: var(--image-dim);
+  background-color: white;
+  border-radius: calc(var(--image-dim) / 2);
+}
+#qr-form-generator {
+  max-width: 350px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#qr-form-generator input {
+  border: 1px solid rgb(210, 68, 68);
+  border-radius: 4px;
+  padding: 0px 16px;
+  height: 35px;
+  outline: none;
+}
+.label-text {
+  font-weight: 500;
+}
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+#generate-button {
+  background-color: rgb(210, 68, 68);
+  cursor: pointer;
+  border: white;
+  border-radius: 4px;
+  color: white;
+  padding: 16px;
+}
+#generate-button:active {
+  scale: 1.05;
+}
+
+#qr-code-container {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 48px;
+  width: 85%;
+}
+
+.qr-code-item {
+  width: 350px;
+  height: 250px;
+  background-color: rgb(210, 68, 68);
+
+  /* background-color: rgb(210, 68, 68); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qr-code-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(-90deg);
+}
+
+#page-switcher {
+  margin: 50px auto;
+  display: flex;
+  width: 85%;
+
+  justify-content: space-between;
+}
+#page-switcher a {
+  color: black;
+  border: 1px solid;
+  padding: 16px;
+  border-radius: 4px;
+}
+#prev-page {
+  border-color: rgb(210, 68, 68) !important;
+  color: rgb(210, 68, 68) !important;
+}
+#next-page {
+  border-color: black;
+  background-color: rgb(210, 68, 68);
+}
+.hidden {
+  display: none !important;
+}
+@media print {
+  body {
+    background-color: white !important;
+  }
+  .dont-print {
+    display: none !important;
+  }
+  #qr-code-container {
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0 !important;
+    width: 85%;
+  }
+  .qr-code-item {
+    height: 100vh !important;
+    background-color: white !important;
+  }
+  .qr-code-wrapper img {
+    width: 350px !important;
+    height: 350px !important;
+  }
+}
