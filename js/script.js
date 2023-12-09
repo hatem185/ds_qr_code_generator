@@ -40,7 +40,7 @@ generateBtn.addEventListener("click", async () => {
   console.log(`qty: ${qty}`);
   if (typeof initial !== "string" || initial.trim().length === 0) return;
   if (isNaN(Number(initial.trim()))) {
-    console.log(`invalid initial serial numbe`);
+    console.log(`invalid initial serial number`);
     return;
   }
   const initialNumber = Number(initial.trim());
