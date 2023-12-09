@@ -108,15 +108,16 @@ main {
   border-color: rgb(210, 68, 68) !important;
   color: rgb(210, 68, 68) !important;
 }
-#next-page,
-#show-all-pag {
+#next-page {
   border-color: black;
   background-color: rgb(210, 68, 68) !important;
 }
 #show-all-page {
   display: block;
   width: fit-content;
-  margin: auto;
+  margin: 32px auto;
+  color: white !important;
+  background-color: rgb(210, 68, 68) !important;
 }
 
 .hidden {
