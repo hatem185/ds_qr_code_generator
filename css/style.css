@@ -76,7 +76,7 @@ main {
   width: 350px;
   height: 250px;
   background-color: rgb(210, 68, 68);
-
+  position: relative;
   /* background-color: rgb(210, 68, 68); */
   display: flex;
   align-items: center;
@@ -160,19 +160,20 @@ main {
     display: none !important;
   }
   #qr-code-container {
-    margin: 0 !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 0 !important;
-    width: 85%;
+    margin: 0px !important;
+    width: auto !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0px !important;
   }
   .qr-code-item {
-    height: 100vh !important;
+    width: calc(100% / 2) !important;
+    height: calc(100vh / 3) !important;
     background-color: white !important;
+    justify-content: flex-start !important;
   }
   .qr-code-wrapper img {
-    width: 350px !important;
-    height: 350px !important;
+    width: 100px !important;
+    height: 100px !important;
   }
 }
