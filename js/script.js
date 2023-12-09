@@ -8,6 +8,7 @@ const prevPage = document.getElementById("prev-page");
 const qtyCode = document.getElementById("qty-code");
 const clientText = document.getElementById("client-qr-code");
 const typeQrCodeText = document.getElementById("type-qr-code");
+const loadingIndicator = document.getElementById("loading-indicator");
 let lastItemPage = 0;
 let qrCodeList = [];
 let qrPage = [];
@@ -45,41 +46,44 @@ generateBtn.addEventListener("click", async () => {
   }
   const initialNumber = Number(initial.trim());
   isGenerated = true;
-  for (let i = 0; i < qty; i++) {
-    try {
-      const qrCodeItem = document.createElement("div");
-      qrCodeItem.classList.add("qr-code-item");
-      qrCodeItem.id = `qr-code-${initialNumber + i}`;
-      const qrCodeText = document.createElement("h1");
-      qrCodeText.classList.add("qr-code-text");
-      qrCodeText.textContent = (initialNumber + i).toString();
-      const qrCodeWrapper = document.createElement("div");
-      qrCodeWrapper.classList.add("qr-code-wrapper");
-      qrCodeWrapper.appendChild(qrCodeText);
-      const data = JSON.stringify({
-        type: typeQrCodeText.value,
-        client: clientText.value,
-        code: (initialNumber + i).toString(),
-      });
-      console.log(data);
-      new QRCode(qrCodeWrapper, {
-        text: data,
-        width: 200,
-        height: 200,
-      });
-      qrCodeItem.appendChild(qrCodeWrapper);
-      qrCodeList.push(qrCodeItem);
-    } catch (e) {
-      console.log(e);
+  loadingIndicator.classList.remove("hidden");
+  setTimeout(async () => {
+    for (let i = 0; i < qty; i++) {
+      try {
+        const qrCodeItem = document.createElement("div");
+        qrCodeItem.classList.add("qr-code-item");
+        qrCodeItem.id = `qr-code-${initialNumber + i}`;
+        const qrCodeText = document.createElement("h1");
+        qrCodeText.classList.add("qr-code-text");
+        qrCodeText.textContent = (initialNumber + i).toString();
+        const qrCodeWrapper = document.createElement("div");
+        qrCodeWrapper.classList.add("qr-code-wrapper");
+        qrCodeWrapper.appendChild(qrCodeText);
+        const data = JSON.stringify({
+          type: typeQrCodeText.value,
+          client: clientText.value,
+          code: (initialNumber + i).toString(),
+        });
+        new QRCode(qrCodeWrapper, {
+          text: data,
+          width: 200,
+          height: 200,
+        });
+        qrCodeItem.appendChild(qrCodeWrapper);
+        qrCodeList.push(qrCodeItem);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }
-  qrPage = qrCodeList.slice(0, 6);
-  lastItemPage = qrPage.length;
-  qrCodeContainer.append(...qrPage);
-  if (qrCodeList.length > 6) {
-    qrPageSwitcher.classList.remove("hidden");
-  } else {
-    qrPageSwitcher.classList.add("hidden");
-  }
-  isGenerated = false;
+    qrPage = qrCodeList.slice(0, 6);
+    lastItemPage = qrPage.length;
+    qrCodeContainer.append(...qrPage);
+    loadingIndicator.classList.add("hidden");
+    if (qrCodeList.length > 6) {
+      qrPageSwitcher.classList.remove("hidden");
+    } else {
+      qrPageSwitcher.classList.add("hidden");
+    }
+    isGenerated = false;
+  }, 1000);
 });

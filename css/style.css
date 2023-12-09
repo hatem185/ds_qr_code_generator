@@ -97,22 +97,59 @@ main {
 
   justify-content: space-between;
 }
-#page-switcher a {
+#page-switcher a,
+#show-all-page {
   color: black;
   border: 1px solid;
   padding: 16px;
   border-radius: 4px;
 }
-#prev-page {
+#prev-pagee {
   border-color: rgb(210, 68, 68) !important;
   color: rgb(210, 68, 68) !important;
 }
-#next-page {
+#next-page,
+#show-all-pag {
   border-color: black;
-  background-color: rgb(210, 68, 68);
+  background-color: rgb(210, 68, 68) !important;
 }
+#show-all-page {
+  display: block;
+  width: fit-content;
+  margin: auto;
+}
+
 .hidden {
   display: none !important;
+}
+
+/* loding indicator */
+#loading-indicator {
+  margin: auto;
+}
+.lds-dual-ring {
+  display: block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid rgb(210, 68, 68);
+  border-color: rgb(210, 68, 68) transparent rgb(210, 68, 68) transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 @media print {
   body {
