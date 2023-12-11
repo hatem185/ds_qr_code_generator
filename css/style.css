@@ -33,7 +33,7 @@ main {
 }
 #qr-form-generator {
   max-width: 350px;
-  margin: 50px auto;
+  margin: 50px auto 25px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -45,12 +45,33 @@ main {
   height: 35px;
   outline: none;
 }
+
+#client-qr-code {
+  cursor: default;
+}
 .label-text {
   font-weight: 500;
 }
 .input-wrapper {
   display: flex;
   flex-direction: column;
+}
+#latest-code-btn {
+  background-color: rgb(210, 68, 68);
+  cursor: pointer;
+  border: white;
+  border-radius: 4px;
+  color: white;
+  padding: 5px;
+}
+#serial-number-input-wrapper {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+#serial-number-input-wrapper input {
+  flex: 1;
 }
 #generate-button {
   background-color: rgb(210, 68, 68);
@@ -60,10 +81,23 @@ main {
   color: white;
   padding: 16px;
 }
+#latest-code-btn:active,
 #generate-button:active {
   scale: 1.05;
 }
-
+.alert-message {
+  margin: auto;
+  max-width: 350px;
+  border-radius: 8px;
+  border: 2px solid black;
+  padding: 16px;
+  color: black;
+  font-size: 14px;
+}
+.alert-error {
+  background-color: #e0454571;
+  border-color: #e04545 !important;
+}
 #qr-code-container {
   margin: auto;
   display: flex;
@@ -173,16 +207,18 @@ main {
   .qr-code-item {
     width: calc(100% / 2) !important;
     height: calc(100vh / 3) !important;
-    background-color: white !important;
+    background-color: rgb(255, 255, 255) !important;
     justify-content: flex-start !important;
     margin: 0px !important;
   }
   .qr-code-item:nth-child(even) {
-    background-color: red !important;
-    padding-left: 25px;
+    padding-left: 30px;
   }
   .qr-code-wrapper img {
     width: 150px !important;
     height: 150px !important;
   }
+}
+@page {
+  margin-left: 16px;
 }

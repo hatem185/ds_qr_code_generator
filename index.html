@@ -21,9 +21,20 @@
       <form action="" id="qr-form-generator" class="dont-print">
         <div class="input-wrapper">
           <label for="client-qr-code">
-            <h5 class="label-text">Client QR code</h5>
+            <h5 class="label-text">
+              Client QR code
+              <span style="display: inline-block; color: red; padding: 5px"
+                >read only</span
+              >
+            </h5>
           </label>
-          <input type="text" id="client-qr-code" />
+          <input
+            type="text"
+            id="client-qr-code"
+            readonly
+            value="Sabil"
+            alt="readonly"
+          />
         </div>
         <div class="input-wrapper">
           <label for="type-qr-code">
@@ -35,7 +46,10 @@
           <label for="initial-serial-number">
             <h5 class="label-text">Initial serial number</h5>
           </label>
-          <input type="text" id="initial-serial-number" required />
+          <div id="serial-number-input-wrapper">
+            <input type="text" id="initial-serial-number" required />
+            <button type="button" id="latest-code-btn">Latest Code</button>
+          </div>
         </div>
         <div class="input-wrapper">
           <label for="qty-code">
@@ -45,9 +59,9 @@
         </div>
         <button type="button" id="generate-button">Generate</button>
       </form>
+      <div class="alert-message hidden dont-print" id="alert-message"></div>
       <div class="lds-dual-ring dont-print hidden" id="loading-indicator"></div>
       <a href="#" id="show-all-page" class="hidden dont-print">Show all</a>
-
       <div id="qr-code-container"></div>
       <div id="page-switcher" class="hidden dont-print">
         <a href="#" id="prev-page">Previous</a>

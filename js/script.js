@@ -10,6 +10,23 @@ const clientText = document.getElementById("client-qr-code");
 const typeQrCodeText = document.getElementById("type-qr-code");
 const loadingIndicator = document.getElementById("loading-indicator");
 const showAllPagesBtn = document.getElementById("show-all-page");
+const alertMessage = document.getElementById("alert-message");
+const latestCodeBtn = document.getElementById("latest-code-btn");
+const baseUrl = "http://localhost:3000/api/qr-code-history";
+const qrConfig = (data) => {
+  return {
+    text: data,
+    width: 200,
+    height: 200,
+    correctLevel: QRCode.CorrectLevel.H,
+  };
+};
+window.addEventListener("afterprint", (e) => {
+  console.log("printed is done.");
+});
+window.matchMedia("print").addEventListener("change", (mql) => {
+  console.log("hello");
+});
 let lastItemPage = 0;
 let qrCodeList = [];
 let qrPage = [];
@@ -18,6 +35,9 @@ function removeAllChildren(element) {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
+}
+function showLoadingIndicator(show) {
+  loadingIndicator.classList.toggle("hidden", !show);
 }
 showAllPagesBtn.addEventListener("click", async () => {
   const isShowingAll =
@@ -48,8 +68,60 @@ prevPage.addEventListener("click", async (e) => {
   qrPage = qrCodeList.slice(lastItemPage - 6, lastItemPage);
   qrCodeContainer.append(...qrPage);
 });
+//
 generateBtn.addEventListener("click", async () => {
   if (isGenerated) return;
+  alertMessage.classList.add("hidden");
+  const resultChecking = await checkRangeInHistory();
+  console.log(resultChecking.message);
+  if (resultChecking.exists === "not_exists") {
+    await generateQRCodes();
+    return;
+  }
+  alertMessage.textContent = resultChecking.message;
+  alertMessage.classList.add("alert-error");
+  alertMessage.classList.remove("hidden");
+});
+//
+latestCodeBtn.addEventListener("click", async () => {
+  if (isGenerated) return;
+  showLoadingIndicator(true);
+  const result = await getLatestCode();
+  showLoadingIndicator(false);
+  if (result?.latestCode != -1) {
+    intialSerialNumber.value = +result.latestCode + 1;
+  }
+});
+//
+async function getLatestCode() {
+  try {
+    const response = await fetch(`${baseUrl}/latest-code-history`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return {
+      message: error,
+      latestCode: -1,
+    };
+  }
+}
+//
+async function checkRangeInHistory() {
+  try {
+    const response = await fetch(
+      `${baseUrl}/check-range-in-history?serial_number=${+intialSerialNumber.value}&qty_codes=${+qtyCode.value}`
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return {
+      message: error,
+      exists: "error",
+    };
+  }
+}
+//
+async function generateQRCodes() {
   const qty = qtyCode.value ?? 0;
   if (qty <= 0) return;
   removeAllChildren(qrCodeContainer);
@@ -65,7 +137,7 @@ generateBtn.addEventListener("click", async () => {
   }
   const initialNumber = Number(initial.trim());
   isGenerated = true;
-  loadingIndicator.classList.remove("hidden");
+  showLoadingIndicator(true);
   setTimeout(async () => {
     for (let i = 0; i < qty; i++) {
       try {
@@ -83,11 +155,7 @@ generateBtn.addEventListener("click", async () => {
           client: clientText.value,
           code: (initialNumber + i).toString(),
         });
-        new QRCode(qrCodeWrapper, {
-          text: data,
-          width: 200,
-          height: 200,
-        });
+        new QRCode(qrCodeWrapper, qrConfig(data));
         qrCodeItem.appendChild(qrCodeWrapper);
         qrCodeList.push(qrCodeItem);
       } catch (e) {
@@ -97,7 +165,8 @@ generateBtn.addEventListener("click", async () => {
     qrPage = qrCodeList.slice(0, 6);
     lastItemPage = qrPage.length;
     qrCodeContainer.append(...qrPage);
-    loadingIndicator.classList.add("hidden");
+    showLoadingIndicator(false);
+
     if (qrCodeList.length > 6) {
       showAllPagesBtn.classList.remove("hidden");
       qrPageSwitcher.classList.remove("hidden");
@@ -107,4 +176,4 @@ generateBtn.addEventListener("click", async () => {
     }
     isGenerated = false;
   }, 1000);
-});
+}
