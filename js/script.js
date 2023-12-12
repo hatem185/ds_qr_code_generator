@@ -87,6 +87,7 @@ generateBtn.addEventListener("click", async () => {
     await generateQRCodes();
     return;
   }
+  console.log("hhhh");
   showAlertMessage(resultChecking.message, "alert-error");
 });
 //
