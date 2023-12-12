@@ -12,7 +12,8 @@ const loadingIndicator = document.getElementById("loading-indicator");
 const showAllPagesBtn = document.getElementById("show-all-page");
 const alertMessage = document.getElementById("alert-message");
 const latestCodeBtn = document.getElementById("latest-code-btn");
-const baseUrl = "http://localhost:3000/api/qr-code-history";
+// const baseUrl = "http://localhost:3000/api/qr-code-history";
+const baseUrl = "https://dssystemqrcodehistory.onrender.com";
 const qrConfig = (data) => {
   return {
     text: data,
