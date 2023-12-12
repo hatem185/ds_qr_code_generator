@@ -98,6 +98,10 @@ main {
   background-color: #e0454571;
   border-color: #e04545 !important;
 }
+.alert-success {
+  background-color: #4fe04571;
+  border-color: #45e071 !important;
+}
 #qr-code-container {
   margin: auto;
   display: flex;

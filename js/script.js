@@ -12,9 +12,9 @@ const loadingIndicator = document.getElementById("loading-indicator");
 const showAllPagesBtn = document.getElementById("show-all-page");
 const alertMessage = document.getElementById("alert-message");
 const latestCodeBtn = document.getElementById("latest-code-btn");
-// const baseUrl = "http://localhost:3000/api/qr-code-history";
-const baseUrl =
-  "https://dssystemqrcodehistory.onrender.com/api/qr-code-history";
+const baseUrl = "http://localhost:3000/api/qr-code-history";
+// const baseUrl =
+//   "https://dssystemqrcodehistory.onrender.com/api/qr-code-history";
 const qrConfig = (data) => {
   return {
     text: data,
@@ -71,6 +71,13 @@ prevPage.addEventListener("click", async (e) => {
   qrCodeContainer.append(...qrPage);
 });
 //
+function showAlertMessage(message, type) {
+  alertMessage.classList.remove("alert-error");
+  alertMessage.classList.remove("alert-success");
+  alertMessage.textContent = message;
+  alertMessage.classList.add(type);
+  alertMessage.classList.remove("hidden");
+}
 generateBtn.addEventListener("click", async () => {
   if (isGenerated) return;
   alertMessage.classList.add("hidden");
@@ -80,9 +87,7 @@ generateBtn.addEventListener("click", async () => {
     await generateQRCodes();
     return;
   }
-  alertMessage.textContent = resultChecking.message;
-  alertMessage.classList.add("alert-error");
-  alertMessage.classList.remove("hidden");
+  showAlertMessage(resultChecking.message, "alert-error");
 });
 //
 latestCodeBtn.addEventListener("click", async () => {
@@ -109,6 +114,9 @@ async function getLatestCode() {
 }
 //
 async function checkRangeInHistory() {
+  console.log(
+    `Checking range in history: ${intialSerialNumber.value}, ${qtyCode.value}`
+  );
   try {
     const response = await fetch(
       `${baseUrl}/check-range-in-history?serial_number=${+intialSerialNumber.value}&qty_codes=${+qtyCode.value}`
@@ -121,6 +129,33 @@ async function checkRangeInHistory() {
       exists: "error",
     };
   }
+}
+//
+async function saveGenratedRangeHistory() {
+  const initNumber = +intialSerialNumber.value;
+  const qyt = +qtyCode.value;
+  try {
+    const dataForm = JSON.stringify({
+      serial_number: initNumber,
+      qty_codes: qyt,
+      printed_pages_number: 0,
+    });
+    console.log(`Saved range history: ${dataForm}`);
+    const response = await fetch(`${baseUrl}/history`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: dataForm,
+    });
+    const data = await response.json();
+    if (response.status == 201) {
+      return data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
 }
 //
 async function generateQRCodes() {
@@ -137,7 +172,7 @@ async function generateQRCodes() {
     console.log(`invalid initial serial number`);
     return;
   }
-  const initialNumber = Number(initial.trim());
+  const initialNumber = +initial.trim();
   isGenerated = true;
   showLoadingIndicator(true);
   setTimeout(async () => {
@@ -167,6 +202,17 @@ async function generateQRCodes() {
     qrPage = qrCodeList.slice(0, 6);
     lastItemPage = qrPage.length;
     qrCodeContainer.append(...qrPage);
+    const result = await saveGenratedRangeHistory();
+    if (result != null) {
+      showAlertMessage(result.message, "alert-success");
+      console.log(result.data);
+    } else {
+      showAlertMessage(
+        `Invalid range history response from server`,
+        "alert-error"
+      );
+      console.log(`Invalid range history response from server`);
+    }
     showLoadingIndicator(false);
 
     if (qrCodeList.length > 6) {
