@@ -9,64 +9,86 @@
   </head>
   <body>
     <header class="dont-print">
-      <h1 class="page-title">QR Code Generator</h1>
-    </header>
-    <main>
       <img
         src="./imgs/ds-logo.png"
         id="ds-logo"
         alt="ds-logo"
         class="dont-print"
       />
-      <form action="" id="qr-form-generator" class="dont-print">
-        <div class="input-wrapper">
-          <label for="client-qr-code">
-            <h5 class="label-text">
-              Client QR code
-              <span style="display: inline-block; color: red; padding: 5px"
-                >*read only</span
-              >
-            </h5>
-          </label>
-          <input
-            type="text"
-            id="client-qr-code"
-            readonly
-            value="Sabil"
-            alt="readonly"
-          />
+      <h1 class="page-title">QR Code Generator</h1>
+    </header>
+    <main>
+      <div class="history-list-container dont-print">
+        <h2 style="margin: 16px 16px 0">Generated History List</h2>
+        <ul id="history-list"></ul>
+        <div id="switch-history-controller">
+          <a href="#" id="prev-history-page">Previous</a>
+          <a href="#" id="next-history-page">Next</a>
         </div>
-        <div class="input-wrapper">
-          <label for="type-qr-code">
-            <h5 class="label-text">Type QR code</h5>
-          </label>
-          <input type="text" id="type-qr-code" />
-        </div>
-        <div class="input-wrapper">
-          <label for="initial-serial-number">
-            <h5 class="label-text">Initial serial number</h5>
-          </label>
-          <div id="serial-number-input-wrapper">
-            <input type="text" id="initial-serial-number" required />
-            <button type="button" id="latest-code-btn">Latest Code</button>
-          </div>
-        </div>
-        <div class="input-wrapper">
-          <label for="qty-code">
-            <h5 class="label-text">Quantity</h5>
-          </label>
-          <input type="number" id="qty-code" required />
-        </div>
-        <button type="button" id="generate-button">Generate</button>
-      </form>
-      <div class="alert-message hidden dont-print" id="alert-message"></div>
-      <div class="lds-dual-ring dont-print hidden" id="loading-indicator"></div>
-      <a href="#" id="show-all-page" class="hidden dont-print">Show all</a>
-      <div id="qr-code-container"></div>
-      <div id="page-switcher" class="hidden dont-print">
-        <a href="#" id="prev-page">Previous</a>
-        <a href="#" id="next-page">Next</a>
       </div>
+      <hr style="margin: 25px" class="dont-print" />
+      <div id="main-content">
+        <form action="" id="qr-form-generator" class="dont-print">
+          <h2 style="text-align: center">Generated QR code Form</h2>
+          <div class="input-wrapper">
+            <label for="client-qr-code">
+              <h5 class="label-text">
+                Client QR code
+                <span style="display: inline-block; color: red; padding: 5px"
+                  >*read only</span
+                >
+              </h5>
+            </label>
+            <input
+              type="text"
+              id="client-qr-code"
+              readonly
+              value="Sabil"
+              alt="readonly"
+            />
+          </div>
+          <div class="input-wrapper">
+            <label for="type-qr-code">
+              <h5 class="label-text">Type QR code</h5>
+            </label>
+            <input type="text" id="type-qr-code" />
+          </div>
+          <div class="input-wrapper">
+            <label for="initial-serial-number">
+              <h5 class="label-text">Initial serial number</h5>
+            </label>
+            <div id="serial-number-input-wrapper">
+              <input type="text" id="initial-serial-number" required />
+              <button type="button" id="latest-code-btn">Latest Code</button>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <label for="qty-code">
+              <h5 class="label-text">Quantity</h5>
+            </label>
+            <input type="number" id="qty-code" required />
+          </div>
+          <div class="input-wrapper">
+            <label for="number-of-pages-code">
+              <h5 class="label-text">Number of page</h5>
+            </label>
+            <input type="number" id="number-of-pages-code" required />
+          </div>
+          <button type="button" id="generate-button">Generate</button>
+        </form>
+        <div class="alert-message hidden dont-print" id="alert-message"></div>
+        <div
+          class="lds-dual-ring dont-print hidden"
+          id="loading-indicator"
+        ></div>
+        <a href="#" id="show-all-page" class="hidden dont-print">Show all</a>
+        <div id="qr-code-container"></div>
+        <div id="page-switcher" class="hidden dont-print">
+          <a href="#" id="prev-page">Previous</a>
+          <a href="#" id="next-page">Next</a>
+        </div>
+      </div>
+
       <br />
     </main>
     <script type="text/javascript" src="js/script.js"></script>
