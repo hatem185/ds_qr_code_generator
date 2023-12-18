@@ -136,9 +136,9 @@ function getNumberOfGeneratedCode() {
   console.log(numberOfPages.value);
   const qty = qtyCode.value;
   if (nop && !isNaN(+nop) && +nop > 0) {
-    return nop * 6;
-  } else if (qty && !isNaN(+qty) && +qty > 0) {
-    return qty;
+    return +nop * 6;
+  } else if (+qty && !isNaN(+qty) && +qty > 0) {
+    return +qty;
   }
   return 0;
 }
@@ -183,9 +183,11 @@ function showAlertMessage(message, type) {
   alertMessage.classList.add(type);
   alertMessage.classList.remove("hidden");
 }
-generateBtn.addEventListener("click", async () => {
-  if (isGenerated) return;
+generateBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
   alertMessage.classList.add("hidden");
+  if (!formValidation()) return;
+  if (isGenerated) return;
   const resultChecking = await checkRangeInHistory();
   console.log(resultChecking.message);
   if (resultChecking.exists === "not_exists") {
@@ -342,3 +344,33 @@ function formatTimestamp(timestampString) {
 
   return `${year}-${month}-${day} ${hours}:${minutes} ${amPm}`;
 }
+function formValidation() {
+  const type = typeQrCodeText.value;
+  if (!(type.length > 0)) {
+    showAlertMessage("Please enter the type of QR code", "alert-error");
+    return false;
+  }
+  if (type !== "order" && type !== "box") {
+    showAlertMessage("QR code type is invalid", "alert-error");
+    return false;
+  }
+  if (!(intialSerialNumber.value.trim().length > 0)) {
+    showAlertMessage("Please enter the intial Serial Number", "alert-error");
+    return false;
+  }
+  const qty = +qtyCode.value;
+  const nop = +numberOfPages.value;
+  console.log(`qty: ${isNaN(qty) || qty <= 0}, nop: ${isNaN(nop) || nop <= 0}`);
+  console.log(`${qty}, ${nop}`);
+  if ((isNaN(qty) || qty <= 0) && (isNaN(nop) || nop <= 0)) {
+    showAlertMessage(
+      "Please enter valid quantity of page of numbers",
+      "alert-error"
+    );
+    return false;
+  }
+  return true;
+}
+numberOfPages.addEventListener("keydown", (e) => {
+  qtyCode.value = 0;
+});

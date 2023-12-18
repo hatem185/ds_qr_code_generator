@@ -28,7 +28,7 @@
       </div>
       <hr style="margin: 25px" class="dont-print" />
       <div id="main-content">
-        <form action="" id="qr-form-generator" class="dont-print">
+        <form action="./" id="qr-form-generator" class="dont-print">
           <h2 style="text-align: center">Generated QR code Form</h2>
           <div class="input-wrapper">
             <label for="client-qr-code">
@@ -66,15 +66,15 @@
             <label for="qty-code">
               <h5 class="label-text">Quantity</h5>
             </label>
-            <input type="number" id="qty-code" required />
+            <input type="number" id="qty-code" />
           </div>
           <div class="input-wrapper">
             <label for="number-of-pages-code">
               <h5 class="label-text">Number of page</h5>
             </label>
-            <input type="number" id="number-of-pages-code" required />
+            <input type="number" id="number-of-pages-code" />
           </div>
-          <button type="button" id="generate-button">Generate</button>
+          <input type="submit" id="generate-button" value="Generate" />
         </form>
         <div class="alert-message hidden dont-print" id="alert-message"></div>
         <div
