@@ -61,6 +61,7 @@ function resetHistoryListElement(fromIndex, toIndex) {
     li.addEventListener("click", async () => {
       intialSerialNumber.value = e.first_code;
       qtyCode.value = e.qty_codes;
+      typeQrCodeText.value = e.type;
       await generateQRCodes(false);
     });
     return li;
@@ -257,6 +258,7 @@ async function saveGenratedRangeHistory(initNumber, qty = 0) {
       serial_number: initNumber,
       qty_codes: qty,
       printed_pages_number: 0,
+      type: capitalise(typeQrCodeText.value),
     });
     console.log(`Saved range history: ${dataForm}`);
     const response = await fetch(`${baseUrl}/history`, {
@@ -306,7 +308,7 @@ async function generateQRCodes(saveHistory = true) {
         qrCodeWrapper.classList.add("qr-code-wrapper");
         qrCodeWrapper.appendChild(qrCodeText);
         const data = JSON.stringify({
-          type: typeQrCodeText.value,
+          type: capitalise(typeQrCodeText.value),
           client: clientText.value,
           code: (initialNumber + i).toString(),
         });
@@ -350,7 +352,7 @@ function formValidation() {
     showAlertMessage("Please enter the type of QR code", "alert-error");
     return false;
   }
-  if (type !== "order" && type !== "box") {
+  if (type.toLowerCase() !== "orders" && type.toLowerCase() !== "box") {
     showAlertMessage("QR code type is invalid", "alert-error");
     return false;
   }
@@ -374,3 +376,8 @@ function formValidation() {
 numberOfPages.addEventListener("keydown", (e) => {
   qtyCode.value = 0;
 });
+
+function capitalise(str = "") {
+  const strArr = str.split("");
+  return strArr[0].toUpperCase().concat(strArr.slice(1).join(""));
+}

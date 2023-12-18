@@ -255,7 +255,7 @@ main {
     margin: 0px !important;
   }
   .qr-code-item:nth-child(even) {
-    padding-left: 50px !important;
+    padding-left: 75px !important;
   }
   .qr-code-wrapper img {
     width: 150px !important;
@@ -263,5 +263,5 @@ main {
   }
 }
 @page {
-  margin-left: 16px !important;
+  margin-left: -15px !important;
 }
