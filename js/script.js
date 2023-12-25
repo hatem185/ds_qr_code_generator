@@ -59,8 +59,24 @@ function resetHistoryListElement(fromIndex, toIndex) {
   const elements = qrHistoryData.data.slice(fromIndex, toIndex).map((e) => {
     const li = createHistoryCardElement(e);
     li.addEventListener("click", async () => {
-      intialSerialNumber.value = e.first_code;
-      qtyCode.value = e.qty_codes;
+      const value = window.prompt(
+        "Please enter the starting code within the specified range for generation"
+      );
+      if (
+        value &&
+        +value > e.first_code &&
+        +value < e.first_code + e.qty_codes - 1
+      ) {
+        intialSerialNumber.value = value;
+        qtyCode.value = e.qty_codes - (+value - e.first_code);
+        console.log(e.qty_codes);
+        console.log(value);
+        console.log(e.first_code);
+        console.log(`${qtyCode.value},${intialSerialNumber.value}`);
+      } else {
+        intialSerialNumber.value = e.first_code;
+        qtyCode.value = e.qty_codes;
+      }
       typeQrCodeText.value = e.type;
       await generateQRCodes(false);
     });

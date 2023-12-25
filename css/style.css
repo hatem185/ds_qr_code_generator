@@ -46,6 +46,7 @@ main {
   background-color: rgb(225, 225, 225);
   border: 2px solid rgb(159, 159, 159);
   border-radius: 8px;
+  cursor: pointer;
 }
 #switch-history-controller {
   width: 100%;
