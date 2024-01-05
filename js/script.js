@@ -16,7 +16,13 @@ const latestCodeBtn = document.getElementById("latest-code-btn");
 const historyListElement = document.getElementById("history-list");
 const prevHistoryPage = document.getElementById("prev-history-page");
 const nextHistoryPage = document.getElementById("next-history-page");
+const ordersBtn = document.getElementById("orders-btn");
+const boxBtn = document.getElementById("box-btn");
+const suffixOption = document.getElementById("suffix-qr-code");
+const suffixOptionWrapper = document.getElementById("suffix-qr-code-wrapper");
+
 const limitOfNumberPage = 16;
+let qrType = "Orders";
 let baseUrl = "";
 let lastItemPage = 0;
 let qrCodeList = [];
@@ -29,6 +35,34 @@ const qrHistoryData = {
 };
 let isGenerated = false;
 /////////////////////
+window.addEventListener("beforeprint", () => {
+  if (qrType.toLocaleLowerCase() === "box") {
+    console.log(qrType);
+    [...document.getElementsByClassName("qr-code-text")].forEach((e) => {
+      e.classList.add("qr-code-text-box");
+    });
+    [...document.getElementsByClassName("qr-code-item")].forEach((e) => {
+      e.classList.add("qr-code-item-box");
+    });
+    document.querySelectorAll(".qr-code-wrapper img").forEach((e) => {
+      console.log(e.parentElement.classList);
+      e.parentElement.classList.remove("qr-code-wrapper");
+      e.parentElement.classList.add("qr-code-wrapper-box");
+    });
+  }
+});
+window.addEventListener("afterprint", () => {
+  [...document.getElementsByClassName("qr-code-text")].forEach((e) => {
+    e.classList.remove("qr-code-text-box");
+  });
+  [...document.getElementsByClassName("qr-code-item")].forEach((e) => {
+    e.classList.remove("qr-code-item-box");
+  });
+  document.querySelectorAll(".qr-code-wrapper-box img").forEach((e) => {
+    e.parentElement.classList.remove("qr-code-wrapper-box");
+    e.parentElement.classList.add("qr-code-wrapper");
+  });
+});
 function removeAllChildren(element) {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
@@ -45,13 +79,48 @@ function setBaseUrl() {
 }
 setBaseUrl();
 ////////////////
+const dataHistoryForm = (initNumber, qty, type) => {
+  const isQRBox = type.toLowerCase() === "box";
+  return JSON.stringify({
+    serial_number: initNumber,
+    qty_codes: qty,
+    printed_pages_number: 0,
+    type: capitalise(type),
+    suffix: isQRBox ? suffixOption.value : null,
+    prefix: isQRBox ? "BX" : null,
+  });
+};
+const qrBoxData = (initialNumber, type) => {
+  const suffix = suffixOption.value;
+  return JSON.stringify({
+    client: clientText.value,
+    type: type,
+    code: `BX${initialNumber}${suffix.toUpperCase()}`,
+  });
+};
+const qrOrdersData = (initialNumber, type) => {
+  return JSON.stringify({
+    client: clientText.value,
+    type: type,
+    code: `${initialNumber}`,
+  });
+};
 const qrConfig = (data) => {
   return {
     text: data,
-    width: 200,
-    height: 200,
+    width: qrType.toLowerCase() === "box" ? 500 : 200,
+    height: qrType.toLowerCase() === "box" ? 500 : 200,
     correctLevel: QRCode.CorrectLevel.H,
   };
+};
+const selectQrType = (first, second, type = "") => {
+  qrType = type;
+  suffixOptionWrapper.classList.toggle(
+    "hidden",
+    qrType.toLowerCase() === "orders"
+  );
+  first.classList.add("picked-color");
+  second.classList.remove("picked-color");
 };
 //////////////
 function resetHistoryListElement(fromIndex, toIndex) {
@@ -62,6 +131,14 @@ function resetHistoryListElement(fromIndex, toIndex) {
       const value = window.prompt(
         "Please enter the starting code within the specified range for generation"
       );
+      if (e.type.toLowerCase() === "box") {
+        console.log("is box");
+        suffixOption.value = e.suffix;
+        selectQrType(boxBtn, ordersBtn, "Box");
+      } else if (e.type.toLowerCase() === "orders") {
+        console.log("is orders");
+        selectQrType(ordersBtn, boxBtn, "Orders");
+      }
       if (
         value &&
         +value > e.first_code &&
@@ -77,7 +154,6 @@ function resetHistoryListElement(fromIndex, toIndex) {
         intialSerialNumber.value = e.first_code;
         qtyCode.value = e.qty_codes;
       }
-      typeQrCodeText.value = e.type;
       await generateQRCodes(false);
     });
     return li;
@@ -87,13 +163,17 @@ function resetHistoryListElement(fromIndex, toIndex) {
 /////////////
 function createHistoryCardElement(data) {
   const li = document.createElement("li");
+  const qrTypeText = document.createElement("h3");
+  qrTypeText.textContent = data.type;
+  qrTypeText.style.color =
+    data.type?.toLowerCase() === "orders" ? "red" : "green";
   const startCodeText = document.createElement("h4");
   startCodeText.textContent = `Fisrt code: ${data.first_code}`;
   const lasCodeText = document.createElement("h4");
   lasCodeText.textContent = `Last code: ${data.last_code}`;
   const createdAtText = document.createElement("h4");
   createdAtText.textContent = `Create At: ${formatTimestamp(data.createdAt)}`;
-  li.append(...[startCodeText, lasCodeText, createdAtText]);
+  li.append(...[qrTypeText, startCodeText, lasCodeText, createdAtText]);
   li.classList.add("history-card");
   return li;
 }
@@ -192,7 +272,18 @@ prevPage.addEventListener("click", async (e) => {
   qrPage = qrCodeList.slice(lastItemPage - 6, lastItemPage);
   qrCodeContainer.append(...qrPage);
 });
-//
+////////--------
+// suffixOption.addEventListener("click", async (e) => {
+//   console.log(suffixOption.value);
+// });
+ordersBtn.addEventListener("click", (_) => {
+  selectQrType(ordersBtn, boxBtn, "Orders");
+});
+boxBtn.addEventListener("click", (_) => {
+  selectQrType(boxBtn, ordersBtn, "Box");
+});
+////////-------
+///////--------
 function showAlertMessage(message, type) {
   alertMessage.classList.remove("alert-error");
   alertMessage.classList.remove("alert-success");
@@ -226,7 +317,9 @@ latestCodeBtn.addEventListener("click", async () => {
 //
 async function getLatestCode() {
   try {
-    const response = await fetch(`${baseUrl}/latest-code-history`);
+    const response = await fetch(
+      `${baseUrl}/latest-code-history?type=${qrType}`
+    );
     const data = await response.json();
     return data;
   } catch (error) {
@@ -243,7 +336,7 @@ async function checkRangeInHistory() {
   console.log(`Checking range in history: ${intialSerialNumber.value}, ${qty}`);
   try {
     const response = await fetch(
-      `${baseUrl}/check-range-in-history?serial_number=${+intialSerialNumber.value}&qty_codes=${qty}`
+      `${baseUrl}/check-range-in-history?serial_number=${+intialSerialNumber.value}&qty_codes=${qty}&type=${qrType}`
     );
     const data = await response.json();
     return data;
@@ -270,12 +363,13 @@ async function saveGeneratedQrCodes(initNumber, qty = 0) {
 }
 async function saveGenratedRangeHistory(initNumber, qty = 0) {
   try {
-    const dataForm = JSON.stringify({
-      serial_number: initNumber,
-      qty_codes: qty,
-      printed_pages_number: 0,
-      type: capitalise(typeQrCodeText.value),
-    });
+    // const dataForm = JSON.stringify({
+    //   serial_number: initNumber,
+    //   qty_codes: qty,
+    //   printed_pages_number: 0,
+    //   type: capitalise(typeQrCodeText.value),
+    // });
+    const dataForm = dataHistoryForm(initNumber, qty, qrType);
     console.log(`Saved range history: ${dataForm}`);
     const response = await fetch(`${baseUrl}/history`, {
       method: "POST",
@@ -293,7 +387,16 @@ async function saveGenratedRangeHistory(initNumber, qty = 0) {
   }
   return null;
 }
-//
+////////////
+////////////
+const qrCodeTetxContent = (code = "") => {
+  if (qrType.toLowerCase() === "box") {
+    return `BX${code}${suffixOption.value}`;
+  }
+  return code;
+};
+////////////
+////////////
 async function generateQRCodes(saveHistory = true) {
   const qty = getNumberOfGeneratedCode();
   if (qty <= 0) return;
@@ -311,6 +414,8 @@ async function generateQRCodes(saveHistory = true) {
   const initialNumber = +initial.trim();
   isGenerated = true;
   showLoadingIndicator(true);
+  const qrData = qrType.toLowerCase() === "orders" ? qrOrdersData : qrBoxData;
+  console.log(`is generated orders?: ${qrType.toLowerCase() === "Orders"}`);
   setTimeout(async () => {
     for (let i = 0; i < qty; i++) {
       try {
@@ -319,15 +424,19 @@ async function generateQRCodes(saveHistory = true) {
         qrCodeItem.id = `qr-code-${initialNumber + i}`;
         const qrCodeText = document.createElement("h2");
         qrCodeText.classList.add("qr-code-text");
-        qrCodeText.textContent = (initialNumber + i).toString();
+
+        qrCodeText.textContent = qrCodeTetxContent(
+          (initialNumber + i).toString()
+        );
         const qrCodeWrapper = document.createElement("div");
         qrCodeWrapper.classList.add("qr-code-wrapper");
         qrCodeWrapper.appendChild(qrCodeText);
-        const data = JSON.stringify({
-          type: capitalise(typeQrCodeText.value),
-          client: clientText.value,
-          code: (initialNumber + i).toString(),
-        });
+        // const data = JSON.stringify({
+        //   type: capitalise(typeQrCodeText.value),
+        //   client: clientText.value,
+        //   code: (initialNumber + i).toString(),
+        // });
+        const data = qrData(initialNumber + i, qrType);
         new QRCode(qrCodeWrapper, qrConfig(data));
         qrCodeItem.appendChild(qrCodeWrapper);
         qrCodeList.push(qrCodeItem);
@@ -363,15 +472,15 @@ function formatTimestamp(timestampString) {
   return `${year}-${month}-${day} ${hours}:${minutes} ${amPm}`;
 }
 function formValidation() {
-  const type = typeQrCodeText.value;
-  if (!(type.length > 0)) {
-    showAlertMessage("Please enter the type of QR code", "alert-error");
-    return false;
-  }
-  if (type.toLowerCase() !== "orders" && type.toLowerCase() !== "box") {
-    showAlertMessage("QR code type is invalid", "alert-error");
-    return false;
-  }
+  // const type = typeQrCodeText.value;
+  // if (!(type.length > 0)) {
+  //   showAlertMessage("Please enter the type of QR code", "alert-error");
+  //   return false;
+  // }
+  // if (type.toLowerCase() !== "orders" && type.toLowerCase() !== "box") {
+  //   showAlertMessage("QR code type is invalid", "alert-error");
+  //   return false;
+  // }
   if (!(intialSerialNumber.value.trim().length > 0)) {
     showAlertMessage("Please enter the intial Serial Number", "alert-error");
     return false;

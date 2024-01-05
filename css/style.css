@@ -77,6 +77,7 @@ main {
   flex-direction: column;
   gap: 16px;
 }
+#qr-form-generator select,
 #qr-form-generator input {
   border: 1px solid #d24444;
   border-radius: 4px;
@@ -84,9 +85,23 @@ main {
   height: 35px;
   outline: none;
 }
+/* #qr-form-generator select {
+} */
 
 #client-qr-code {
   cursor: default;
+}
+#qr-type-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+.qr-type-btn {
+  cursor: pointer;
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgb(41, 41, 41);
 }
 .label-text {
   font-weight: 500;
@@ -167,7 +182,10 @@ main {
   justify-content: center;
   align-items: center;
 }
-
+.qr-code-wrapper img {
+  width: 150px !important;
+  height: 150px !important;
+}
 #page-switcher {
   margin: 50px auto;
   display: flex;
@@ -201,7 +219,10 @@ main {
 .hidden {
   display: none !important;
 }
-
+.picked-color {
+  background-color: rgb(210, 68, 68) !important;
+  color: white !important;
+}
 /* loding indicator */
 #loading-indicator {
   margin: auto;
@@ -246,21 +267,39 @@ main {
     width: 100% !important;
     display: flex !important;
     flex-wrap: wrap;
+
     gap: 0px !important;
   }
+  .qr-code-container-box {
+    justify-content: start !important;
+  }
   .qr-code-item {
-    width: calc(100% / 2) !important;
-    height: calc(100vh / 3) !important;
+    width: calc(100% / 2);
+    height: calc(100vh / 3);
     background-color: rgb(255, 255, 255) !important;
-    justify-content: flex-start !important;
+    /* background-color: #d24444; */
     margin: 0px !important;
   }
   .qr-code-item:nth-child(even) {
     padding-left: 75px !important;
   }
+  .qr-code-item-box {
+    align-items: flex-start !important;
+    padding-top: 100px;
+    width: calc(100% / 1) !important;
+    height: calc(100vh / 1) !important;
+  }
   .qr-code-wrapper img {
     width: 150px !important;
     height: 150px !important;
+  }
+  .qr-code-wrapper-box image {
+    width: 500px !important;
+    height: 500px !important;
+  }
+  .qr-code-text-box {
+    font-size: 3rem !important;
+    text-align: center;
   }
 }
 @page {

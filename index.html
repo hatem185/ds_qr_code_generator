@@ -29,6 +29,19 @@
       <hr style="margin: 25px" class="dont-print" />
       <div id="main-content">
         <form action="./" id="qr-form-generator" class="dont-print">
+          <div id="qr-type-container">
+            <button
+              id="orders-btn"
+              class="qr-type-btn picked-color"
+              type="button"
+              value="Orders"
+            >
+              Oreders
+            </button>
+            <button id="box-btn" class="qr-type-btn" type="button" value="Box">
+              Box
+            </button>
+          </div>
           <h2 style="text-align: center">Generated QR code Form</h2>
           <div class="input-wrapper">
             <label for="client-qr-code">
@@ -47,12 +60,12 @@
               alt="readonly"
             />
           </div>
-          <div class="input-wrapper">
+          <!-- <div class="input-wrapper">
             <label for="type-qr-code">
               <h5 class="label-text">Type QR code</h5>
             </label>
             <input type="text" id="type-qr-code" />
-          </div>
+          </div> -->
           <div class="input-wrapper">
             <label for="initial-serial-number">
               <h5 class="label-text">Initial serial number</h5>
@@ -73,6 +86,19 @@
               <h5 class="label-text">Number of page</h5>
             </label>
             <input type="number" id="number-of-pages-code" />
+          </div>
+          <div id="suffix-qr-code-wrapper" class="input-wrapper hidden">
+            <label for="suffix-qr-code">
+              <h5 class="label-text">Suffix</h5>
+            </label>
+            <select id="suffix-qr-code">
+              <option value="BN">BN</option>
+              <option value="ZW">ZW</option>
+              <option value="MS">MS</option>
+              <option value="WA">WA</option>
+              <option value="SB">SB</option>
+              <option value="AG">AG</option>
+            </select>
           </div>
           <input type="submit" id="generate-button" value="Generate" />
         </form>
