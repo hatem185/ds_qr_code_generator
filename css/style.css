@@ -285,7 +285,7 @@ main {
   }
   .qr-code-item-box {
     align-items: flex-start !important;
-    padding-top: 100px;
+    padding-top: 95px;
     width: calc(100% / 1) !important;
     height: calc(100vh / 1) !important;
   }
