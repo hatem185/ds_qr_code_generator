@@ -20,7 +20,7 @@ const ordersBtn = document.getElementById("orders-btn");
 const boxBtn = document.getElementById("box-btn");
 const suffixOption = document.getElementById("suffix-qr-code");
 const suffixOptionWrapper = document.getElementById("suffix-qr-code-wrapper");
-
+const numberOfPagesWrapper = document.getElementById("number-of-pages-wrapper");
 const limitOfNumberPage = 16;
 let qrType = "Orders";
 let baseUrl = "";
@@ -115,9 +115,14 @@ const qrConfig = (data) => {
 };
 const selectQrType = (first, second, type = "") => {
   qrType = type;
+
   suffixOptionWrapper.classList.toggle(
     "hidden",
     qrType.toLowerCase() === "orders"
+  );
+  numberOfPagesWrapper.classList.toggle(
+    "hidden",
+    qrType.toLowerCase() === "box"
   );
   first.classList.add("picked-color");
   second.classList.remove("picked-color");
