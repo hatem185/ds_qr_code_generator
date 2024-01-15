@@ -56,6 +56,7 @@ window.addEventListener("afterprint", () => {
     e.classList.remove("qr-code-text-box");
   });
   [...document.getElementsByClassName("qr-code-item")].forEach((e) => {
+    console.log("qr-code-item-box is removed");
     e.classList.remove("qr-code-item-box");
   });
   document.querySelectorAll(".qr-code-wrapper-box img").forEach((e) => {
